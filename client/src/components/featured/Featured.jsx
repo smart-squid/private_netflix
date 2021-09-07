@@ -1,13 +1,34 @@
 import { InfoOutlined, PlayArrow } from "@material-ui/icons";
 import "./featured.scss";
 import movieInfo from "../../assets/imgs/movieinfo.png";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
-const Featured = (type) => {
+const Featured = ({type}) => {
+    const [featured, setFeatured] = useState({});
+    console.log(type);
+
+    useEffect(() => {
+        const getRandomMovie = async () => {
+            try {
+                const res = await axios.get(`/movies/find/random${type ? "?type=" + type : ""}`, {
+                    headers: {
+                        token: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxMzFhMDcxOTVjMzhmYTg2NzhkODIzYiIsImlzQWRtaW4iOnRydWUsImlhdCI6MTYzMTAxMTg5MCwiZXhwIjoxNjMxMDk4MjkwfQ.Oi3IdC1fZw2srgEBpAHe8zDBt_Jjd9r8d5yquojFFs4",
+                    }
+                });
+                setFeatured(res.data[0]);
+            } catch (err) {
+                console.log(err);
+            }
+        };
+        getRandomMovie();
+    }, [type]);
+    console.log(featured);
     return (
         <div className="featured">
-            {type.type && (
+            {type && (
                 <div className="category">
-                    <span>{type.type === "movie" ? "Movies" : "Series"}</span>
+                    <span>{type === "movies" ? "Movies" : "Series"}</span>
                     <select name="genre" id="genre">
                         <option>Genre</option>
                         <option value="cen">Hidden</option>
@@ -16,20 +37,13 @@ const Featured = (type) => {
                 </div>
             )}
             <img
-                src="https://i1.avdbs.com/img/main_actor/main-2105-1.jpg"
+                src={featured.img}
                 alt=""
             />
             <div className="info">
-                <img src={movieInfo} alt="" />
+                <img src={featured.imgtitle} alt="" />
                 <span className="desc">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    <br />
-                    Earum, dolores dolorum nam necessitatibus nesciunt
-                    cupiditate
-                    <br />
-                    excepturi ullam ducimus iure inventore veritatis minus vel
-                    <br /> quaerat nihil architecto unde esse facilis
-                    voluptatibus.
+                    {featured.desc}
                 </span>
                 <div className="buttons">
                     <button className="play">

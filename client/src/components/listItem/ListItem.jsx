@@ -4,46 +4,68 @@ import {
     ThumbDownOutlined,
     ThumbUpAltOutlined,
 } from "@material-ui/icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 import "./listItem.scss";
+import { Link } from "react-router-dom";
 
-export default function ListItem(index) {
+export default function ListItem({ index, item }) {
     const [isHovered, setIsHovered] = useState(false);
-    const trailer = "https://video.twimg.com/ext_tw_video/1254930175248052224/pu/vid/720x404/hqWGFB2TYpK9QFBo.mp4?tag=10";
+    const [movie, setMovie] = useState({});
+
+    useEffect(() => {
+        const getMovie = async () => {
+            try {
+                const res = await axios.get("/movies/" + item, {
+                    headers: {
+                        token: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxMzFhMDcxOTVjMzhmYTg2NzhkODIzYiIsImlzQWRtaW4iOnRydWUsImlhdCI6MTYzMTAxMTg5MCwiZXhwIjoxNjMxMDk4MjkwfQ.Oi3IdC1fZw2srgEBpAHe8zDBt_Jjd9r8d5yquojFFs4",
+                    },
+                });
+                setMovie(res.data);
+            } catch (err) {
+                console.log(err);
+            }
+        };
+        getMovie();
+    }, [item]);
+
     return (
-        <div
-            className="listItem"
-            style={{
-                left: isHovered && index.index * 225 - 50 + index.index * 2.5,
-            }}
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-        >
-            <img src="https://i2.avdbs.com/actor/a06/6608_ns.jpg" alt="" />
-            {isHovered && (
-                <>
-                    <video src={trailer} autoPlay={true} loop muted />
-                    <div className="itemInfo">
-                        <div className="icons">
-                            <PlayArrow className="icon" />
-                            <Add className="icon" />
-                            <ThumbUpAltOutlined className="icon" />
-                            <ThumbDownOutlined className="icon" />
+        <Link to={{ pathname: "/watch", movie: movie }}>
+            <div
+                className="listItem"
+                style={{
+                    left: isHovered && index * 225 - 50 + index * 2.5,
+                }}
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+            >
+                <img src={movie.img} alt="" />
+                {isHovered && (
+                    <>
+                        <video
+                            src={movie.imgTrailer}
+                            autoPlay={true}
+                            loop
+                            muted
+                        />
+                        <div className="itemInfo">
+                            <div className="icons">
+                                <PlayArrow className="icon" />
+                                <Add className="icon" />
+                                <ThumbUpAltOutlined className="icon" />
+                                <ThumbDownOutlined className="icon" />
+                            </div>
+                            <div className="itemInfoTop">
+                                <span>{movie.actors}</span>
+                                <span>{movie.genre}</span>
+                                <span>{movie.duration}</span>
+                                <span>{movie.releaseDate}</span>
+                            </div>
+                            <div className="desc">{movie.desc}</div>
                         </div>
-                        <div className="itemInfoTop">
-                            <span>Action</span>
-                            <span>74 mins</span>
-                            <span className="ageLimit">+15</span>
-                            <span>2017</span>
-                        </div>
-                        <div className="desc">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing
-                            elit. Eius iste nihil tenetur. Saepe eum dolorum
-                            corrupti impedit,
-                        </div>
-                    </div>
-                </>
-            )}
-        </div>
+                    </>
+                )}
+            </div>
+        </Link>
     );
 }

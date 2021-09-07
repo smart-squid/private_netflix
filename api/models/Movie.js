@@ -9,10 +9,10 @@ const movieSchema = new mongoose.Schema(
         imgTrailer: { type: String },
         imgSmall: { type: String },
         video: { type: String },
-        duration: { type: Number, required: true },
+        duration: { type: Number },
         genre: { type: String },
         actors: { type: String },
-        releaseDate: { type: Date, required: true },
+        releaseDate: { type: Date },
         isSeries: { type: Boolean, default: false },
     },
     { timestamps: true }
