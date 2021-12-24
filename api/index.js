@@ -26,5 +26,5 @@ app.use("/api/lists", listRoute);
 app.use("/api/stats", statRoute);
 
 app.listen(8080, () => {
-    console.log("Backend server is running!");
+    console.log("Backend server is running on port 8080");
 });

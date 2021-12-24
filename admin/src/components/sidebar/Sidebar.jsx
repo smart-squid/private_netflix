@@ -24,7 +24,7 @@ export default function Sidebar() {
                     <h3 className="sidebarTitle">대시보드</h3>
                     <ul className="sidebarList">
                         <Link to="/" className="link">
-                            <li className="sidebarListItem active">
+                            <li className="sidebarListItem">
                                 <LineStyle className="sidebarIcon" />
                                 홈
                             </li>

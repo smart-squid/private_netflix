@@ -12,7 +12,7 @@ const movieSchema = new mongoose.Schema(
         duration: { type: Number },
         genre: { type: String },
         actors: { type: String },
-        releaseDate: { type: Date },
+        releaseDate: { type: String },
         isSeries: { type: Boolean, default: false },
     },
     { timestamps: true }
